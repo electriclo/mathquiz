@@ -2,18 +2,21 @@ import random
 
 def display_intro():
     title = "** A Simple Math Quiz **"
-    print("*" * len(title))
+    print("*" * 24)
     print(title)
-    print("*" * len(title))
+    print("*" * 24)
 
 
 def display_menu():
-    menu_list = ["1. Addition", "2. Subtraction", "3. Multiplication", "4. Integer Division", "5. Exit"]
-    print(menu_list[0])
-    print(menu_list[1])
-    print(menu_list[2])
-    print(menu_list[3])
-    print(menu_list[4])
+    menu_list = [
+        "1. Addition",
+        "2. Subtraction",
+        "3. Multiplication",
+        "4. Integer Division",
+        "5. Exit"
+    ]
+    for item in menu_list:
+        print(item)
 
 
 def display_separator():
@@ -22,67 +25,51 @@ def display_separator():
 
 def get_user_input():
     user_input = int(input("Enter your choice: "))
-    while user_input > 5 or user_input <= 0:
+    while not 0 < user_input <= 5:
         print("Invalid menu option.")
         user_input = int(input("Please try again: "))
-    else:
-        return user_input
+    return user_input
 
 
 def get_user_solution(problem):
     print("Enter your answer")
     print(problem, end="")
-    result = int(input(" = "))
-    return result
+    return int(input(" = "))
 
 
 def check_solution(user_solution, solution, count):
     if user_solution == solution:
-        count = count + 1
         print("Correct.")
-        return count
-    else:
-        print("Incorrect.")
-        return count
+        return count + 1
+    print("Incorrect.")
+    return count
 
 
 def menu_option(index, count):
     number_one = random.randrange(1, 21)
     number_two = random.randrange(1, 21)
-    if index is 1:
-        problem = str(number_one) + " + " + str(number_two)
-        solution = number_one + number_two
-        user_solution = get_user_solution(problem)
-        count = check_solution(user_solution, solution, count)
-        return count
-    elif index is 2:
-        problem = str(number_one) + " - " + str(number_two)
-        solution = number_one - number_two
-        user_solution = get_user_solution(problem)
-        count = check_solution(user_solution, solution, count)
-        return count
-    elif index is 3:
-        problem = str(number_one) + " * " + str(number_two)
-        solution = number_one * number_two
-        user_solution = get_user_solution(problem)
-        count = check_solution(user_solution, solution, count)
-        return count
-    else:
-        problem = str(number_one) + " // " + str(number_two)
-        solution = number_one // number_two
-        user_solution = get_user_solution(problem)
-        count = check_solution(user_solution, solution, count)
-        return count
+    options = {
+        1: f'{number_one} + {number_two}',
+        2: f'{number_one} - {number_two}',
+        3: f'{number_one} * {number_two}',
+        4: f'{number_one} // {number_two}'
+    }
+    index = index if index in options else 4
+    problem = options[index]
+    solution = eval(problem)
+    user_solution = get_user_solution(problem)
+    count = check_solution(user_solution, solution, count)
+    return count
 
 
 def display_result(total, correct):
     if total > 0:
         result = correct / total
         percentage = round((result * 100), 2)
-    if total == 0:
+    else:
         percentage = 0
-    print("You answered", total, "questions with", correct, "correct.")
-    print("Your score is ", percentage, "%. Thank you.", sep = "")
+    print(f"You answered {total} questions with {correct} correct.")
+    print(f"Your score is {percentage}%. Thank you.")
 
 
 def main():
